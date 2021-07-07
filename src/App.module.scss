@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #b4dcff;
+}
+
+button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+h1 {
+    font-family: "Russo One", sans-serif;
+    font-size: 22px;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    margin-top: 30px;
+}
+
+h2 {
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    margin: 0;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+p, a {
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
+    line-height: 150%;
+}
+
+.cont {
+
+    width: 80%;
+    max-width: 1000px;
+    height: 700px;
+    background: #28282e;
+    padding: 1rem;
+    margin: 0 auto;
+
+}
