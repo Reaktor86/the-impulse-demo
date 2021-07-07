@@ -1,3 +1,21 @@
+@mixin contentFit() {
+    width: 80%;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+@mixin contentFitMobile() {
+    width: 390px;
+    margin: 30px auto;
+}
+
+@mixin btnTurn() {
+    width: 80px;
+    height: 50px;
+    background-color: #d59e35;
+    font-size: 1.4em;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -37,13 +55,104 @@ p, a {
     line-height: 150%;
 }
 
-.cont {
+.main {
 
-    width: 80%;
-    max-width: 1000px;
-    height: 700px;
-    background: #28282e;
-    padding: 1rem;
-    margin: 0 auto;
+    @include contentFit();
+    padding: 20px;
+    border-radius: 10px;
+    background: #68a5db;
+    display: flex;
+    justify-content: space-between;
 
+    .game {
+
+        .field {
+            width: 500px;
+            height: 500px;
+            background: #28282e;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+
+        .controls {
+            width: 500px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            .btnTurnLeft {
+                @include btnTurn();
+            }
+
+            .btnTurnRight {
+                @include btnTurn();
+                margin: 0 0 0 -116px;
+            }
+
+            .btnPlay {
+                background-color: #408b40;
+                width: 100px;
+                height: 50px;
+                font-size: 1.4em;
+            }
+        }
+    }
+}
+
+.footer {
+    @include contentFit();
+
+    p, a {
+        font-size: 14px;
+    }
+
+    p {
+        margin-left: 10px;
+    }
+}
+
+@media all and (max-width: 999px) {
+
+    p, a {
+        line-height: 120%;
+    }
+
+    .main {
+        @include contentFitMobile();
+        flex-direction: column;
+
+        .sidebar {
+            order: 1;
+        }
+        .game {
+            order: 0;
+
+            .field {
+                width: 350px;
+                height: 350px;
+            }
+
+            .controls {
+                width: 350px;
+
+                .btnTurnRight {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .footer {
+        @include contentFitMobile();
+    }
+}
+
+/*удалить!!!*/
+
+.cell {
+    width: 10%;
+    height: 10%;
+    background: green;
 }
