@@ -1,0 +1,72 @@
+.empty {
+  width: 10%;
+  height: 10%;
+  position: relative;
+  box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, 0.15);
+}
+
+.filled {
+  width: 10%;
+  height: 10%;
+  position: relative;
+  border: 1px solid black;
+}
+
+.outer1 {
+  width: 100%;
+  height: 28%;
+}
+
+.outer2 {
+  width: 28%;
+  height: 44%;
+  position: absolute;
+  top: 28%;
+}
+
+.outer3 {
+  width: 28%;
+  height: 44%;
+  position: absolute;
+  top: 28%;
+  right: 0;
+}
+
+.outer4 {
+  width: 100%;
+  height: 28%;
+  position: absolute;
+  bottom: 0;
+}
+
+.inner {
+  width: 44%;
+  height: 44%;
+  position: absolute;
+  left: 28%;
+  top: 28%;
+  z-index: 1;
+  border: 1px solid black;
+}
+
+.red {
+  background: #db0909;
+}
+
+.blue {
+  background: #0073ff;
+}
+
+.green {
+  background: #27b400;
+}
+
+.yellow {
+  background: #ffb700;
+}
+
+.white {
+  background: #fff;
+}
+
+/*# sourceMappingURL=Cell.module.css.map */
