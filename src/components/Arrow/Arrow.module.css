@@ -1,0 +1,31 @@
+.arrow {
+  width: 46px;
+  position: absolute;
+  z-index: 2;
+  transform-origin: -29px 50%;
+  margin: 21px 0 0 53px;
+  animation-name: flicker;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+}
+
+@media all and (max-width: 999px) {
+  .arrow {
+    width: 33px;
+    transform-origin: -19px 50%;
+    margin: 15px 0 0 36px;
+  }
+}
+@keyframes flicker {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
+/*# sourceMappingURL=Arrow.module.css.map */

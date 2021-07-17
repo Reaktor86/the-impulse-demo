@@ -49,6 +49,18 @@
   border: 1px solid black;
 }
 
+.outer__p {
+  margin: 0;
+  position: absolute;
+  top: 1%;
+  left: 3%;
+}
+
+.inner__p {
+  top: 0;
+  left: 0;
+}
+
 .red {
   background: #db0909;
 }
@@ -67,6 +79,12 @@
 
 .white {
   background: #fff;
+}
+
+@media all and (max-width: 999px) {
+  .outer__p, .inner__p {
+    font-size: 14px;
+  }
 }
 
 /*# sourceMappingURL=Cell.module.css.map */

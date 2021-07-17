@@ -1,7 +1,8 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import style from './App.module.scss';
 import Stat from "./components/Stat/Stat";
 import Cell from "./components/Cell/Cell";
+import Arrow from "./components/Arrow/Arrow";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -16,7 +17,63 @@ const map01 = [
     [43, 0, 0, 0, 0, 0, 0, 0, 0, 41],
 ];
 
+const rotateArray = [0,315,270,225,180,135,90,45];
+const arrowRotateIndexDefault = 0;
+const posXDefault = 1;
+const posYDefault = 8;
+
+
 function App() {
+
+    const [arrowRotateIndex, setArrowRotateIndex] = useState(arrowRotateIndexDefault);
+    const [posX, setPosX] = useState(posXDefault);
+    const [posY, setPosY] = useState(posYDefault);
+    const [arrowShow, setArrowShow] = useState(true);
+    const [disableControls, setDisableControls] = useState(false);
+
+    const reset = () => {
+
+        setArrowRotateIndex(arrowRotateIndexDefault);
+        setPosX(posXDefault);
+        setPosY(posYDefault);
+    }
+
+    useEffect(() => {
+        reset();
+    }, [])
+
+    const rotateLeft = () => {
+
+        if (arrowRotateIndex === rotateArray.length - 1) {
+            setArrowRotateIndex(0);
+        } else {
+            setArrowRotateIndex(prev => prev + 1);
+        }
+    }
+
+    const rotateRight = () => {
+
+        if (arrowRotateIndex === 0) {
+            setArrowRotateIndex(rotateArray.length - 1);
+        } else {
+            setArrowRotateIndex(prev => prev - 1);
+        }
+    }
+
+    const play = () => {
+
+        setDisableControls(true);
+        setArrowShow(false);
+    }
+
+    /**
+     * возвращает код текущего квадрата, где сейчас находится стрелка (напр, 23, 0, 45)
+     */
+
+    const getCurCellCode = () => {
+
+        return map01[posY][posX];
+    }
 
   return (
       <div className="App">
@@ -30,8 +87,8 @@ function App() {
               <div className={style.sidebar}>
                   <p><b>Цель игры:</b><br/>добраться до квадрата со знаком "К"</p>
                   <p><b>Управление:</b></p>
-                  <p>"A" - указатель влево</p>
-                  <p>"D" - указатель вправо</p>
+                  <p>"A" - вращать стрелку влево</p>
+                  <p>"D" - вращать стрелку вправо</p>
                   <p>"пробел" - пуск</p><br/>
                   <Stat />
               </div>
@@ -47,11 +104,31 @@ function App() {
                           })
                       }
 
+                      <Arrow
+                          rotateIndex={arrowRotateIndex}
+                          posX={posX}
+                          posY={posY}
+                          rotateArray={rotateArray}
+                          arrowShow={arrowShow}
+                      />
                   </div>
                   <div className={style.controls}>
-                      <button className={style.btnTurnLeft}>&#9668;</button>
-                      <button className={style.btnTurnRight}>&#9658;</button>
-                      <button className={style.btnPlay}><b>ПУСК</b></button>
+                      <button
+                          className={style.btnTurnLeft}
+                          onClick={rotateLeft}
+                          disabled={disableControls}
+                      >&#9668;</button>
+                      <button
+                          className={style.btnTurnRight}
+                          onClick={rotateRight}
+                          disabled={disableControls}
+                      >&#9658;</button>
+                      <button
+                          className={style.btnPlay}
+                          onClick={play}
+                          disabled={disableControls}
+                      ><b>ПУСК</b>
+                      </button>
                   </div>
               </div>
           </main>

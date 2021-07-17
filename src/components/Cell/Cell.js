@@ -17,8 +17,8 @@ const Cell = props => {
         // в клетке есть квадрат
         rootStyle.push(style.filled);
 
-        innerType = Math.floor(props.type / 10);
-        outerType = props.type % 10;
+        innerType = props.type % 10;
+        outerType = Math.floor(props.type / 10);
     }
 
     return (
@@ -74,6 +74,8 @@ const Filled = props => {
             case 4:
                 outerColor = style.red;
                 break;
+            default:
+                outerColor = style.white;
         }
 
         switch (props.innerType) {
@@ -89,6 +91,8 @@ const Filled = props => {
             case 4:
                 innerColor = style.red;
                 break;
+            default:
+                innerColor = style.white;
         }
 
         outerStyle1.push(outerColor);
@@ -105,6 +109,32 @@ const Filled = props => {
             <div className={outerStyle3.join(' ')}></div>
             <div className={outerStyle4.join(' ')}></div>
             <div className={innerStyle.join(' ')}></div>
+            {
+                (props.innerType > 4 || props.outerType > 4) ?
+                    <CellMark innerType={props.innerType} outerType={props.outerType}/>
+                    : null
+            }
         </>
+    )
+}
+
+const CellMark = props => {
+
+    let mark;
+    if (props.innerType === 5 || props.outerType === 5) {
+        mark = 'Н';
+    } else if (props.innerType === 6 || props.outerType === 6) {
+        mark = 'К';
+    }
+
+    let markStyle;
+    if (props.innerType > 4) {
+        markStyle = style.inner__p;
+    } else if (props.outerType > 4) {
+        markStyle = style.outer__p;
+    }
+
+    return (
+        <p className={markStyle}>{mark}</p>
     )
 }
