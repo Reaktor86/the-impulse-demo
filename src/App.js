@@ -4,7 +4,14 @@ import Stat from "./components/Stat/Stat";
 import Cell from "./components/Cell/Cell";
 import Arrow from "./components/Arrow/Arrow";
 import {useSelector, useDispatch} from "react-redux";
-import {setArrowPosX, setArrowPosY, setArrowRotateIndex, setArrowShow, setDisableControls} from "./redux/actionCreator";
+import {
+    setArrowPosX,
+    setArrowPosY,
+    setArrowRotateIndex,
+    setArrowShow,
+    setDisableControls,
+    setMoving
+} from "./redux/actionCreator";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -83,6 +90,9 @@ function App() {
         dispatch(
             setArrowShow(false)
         );
+        dispatch(
+            setMoving(true)
+        );
     }
 
   return (
@@ -112,6 +122,7 @@ function App() {
 
                                   return <Cell
                                       key={'' + colIndex + rowIndex}
+                                      id={'' + colIndex + rowIndex}
                                       type={val}
                                   />
                               })

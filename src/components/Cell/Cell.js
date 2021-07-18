@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './Cell.module.scss';
+import {useSelector} from "react-redux";
 
 const Cell = props => {
 
@@ -25,7 +26,7 @@ const Cell = props => {
         <div className={rootStyle.join(' ')}>
             {
                 props.type !== 0 ?
-                    <Filled innerType={innerType} outerType={outerType} />
+                    <Filled innerType={innerType} outerType={outerType} id={props.id}/>
                     : null
             }
         </div>
@@ -50,11 +51,18 @@ const Filled = props => {
 
  */
 
+    const arrowPosX = useSelector(state => state.arrowPosX);
+    const arrowPosY = useSelector(state => state.arrowPosY);
+    const rule = useSelector(state => state.rule);
+    const moving = useSelector(state => state.moving);
+
     const outerStyle1 = [style.outer1];
     const outerStyle2 = [style.outer2];
     const outerStyle3 = [style.outer3];
     const outerStyle4 = [style.outer4];
     const innerStyle = [style.inner];
+
+    // определение цветов и стилей анимации
 
     if (props.innerType && props.outerType) {
 
@@ -100,6 +108,36 @@ const Filled = props => {
         outerStyle3.push(outerColor);
         outerStyle4.push(outerColor);
         innerStyle.push(innerColor);
+
+        // анимировать ли квадрат. Если да, то внутренний или наружний
+
+        if (props.id === '' + arrowPosY + arrowPosX) {
+
+            if (moving) {
+
+                // скрывать во время движения
+                if (rule === 'inner') {
+                    innerStyle.push(style.hide);
+                } else {
+                    outerStyle1.push(style.hide);
+                    outerStyle2.push(style.hide);
+                    outerStyle3.push(style.hide);
+                    outerStyle4.push(style.hide);
+                }
+            } else {
+
+                // если движения нет, то применить анимацию flicker
+                if (rule === 'inner') {
+                    innerStyle.push(style.flicker);
+                } else {
+                    outerStyle1.push(style.flicker);
+                    outerStyle2.push(style.flicker);
+                    outerStyle3.push(style.flicker);
+                    outerStyle4.push(style.flicker);
+                }
+            }
+
+        }
     }
 
     return (

@@ -4,6 +4,7 @@ export const SET_ARROW_POS_Y = 'SET_ARROW_POS_Y';
 export const SET_DISABLE_CONTROLS = 'SET_DISABLE_CONTROLS';
 export const SET_ARROW_SHOW = 'SET_ARROW_SHOW';
 export const SWITCH_RULE = 'SWITCH_RULE';
+export const SET_MOVING = 'SET_MOVING';
 
 export function setArrowRotateIndex(index) {
     return {
@@ -43,5 +44,12 @@ export function setArrowShow(value) {
 export function switchRule() {
     return {
         type: SWITCH_RULE,
+    }
+}
+
+export function setMoving(value) {
+    return {
+        type: SET_MOVING,
+        payload: value,
     }
 }

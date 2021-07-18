@@ -3,17 +3,21 @@ import {
     SET_ARROW_POS_Y,
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW,
-    SET_DISABLE_CONTROLS, SWITCH_RULE
+    SET_DISABLE_CONTROLS,
+    SET_MOVING,
+    SWITCH_RULE
 } from "./actionCreator";
 
 const initialState = {
 
-    arrowRotateIndex: 0,
-    arrowPosX: 1,
-    arrowPosY: 8,
-    arrowShow: true,
-    disableControls: false,
-    rule: 'inner',
+    arrowRotateIndex: 0, // индекс для массива с вариантами углов стрелки
+    arrowPosX: 1, // позиция стрелки по X (column)
+    arrowPosY: 8, // позиция стрелки по Y (row)
+    arrowShow: true, // показать стрелку
+    disableControls: false, // отключить элементы управления
+    rule: 'inner', // текущее правило: внутренний квадрат или внешний
+    moving: false, // совершается движение в данный момент
+
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -66,7 +70,14 @@ export default function rootReducer(state = initialState, action) {
 
             return {
                 ...state,
-                rule: newState
+                rule: newState,
+            }
+        }
+
+        case SET_MOVING: {
+            return {
+                ...state,
+                moving: action.payload,
             }
         }
 
