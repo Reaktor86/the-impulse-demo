@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import style from './App.module.scss';
 import Stat from "./components/Stat/Stat";
 import Cell from "./components/Cell/Cell";
 import Arrow from "./components/Arrow/Arrow";
+import {useSelector, useDispatch} from "react-redux";
+import {setArrowPosX, setArrowPosY, setArrowRotateIndex, setArrowShow, setDisableControls} from "./redux/actionCreator";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -22,20 +24,25 @@ const arrowRotateIndexDefault = 0;
 const posXDefault = 1;
 const posYDefault = 8;
 
-
 function App() {
 
-    const [arrowRotateIndex, setArrowRotateIndex] = useState(arrowRotateIndexDefault);
-    const [posX, setPosX] = useState(posXDefault);
-    const [posY, setPosY] = useState(posYDefault);
-    const [arrowShow, setArrowShow] = useState(true);
-    const [disableControls, setDisableControls] = useState(false);
+    const dispatch = useDispatch();
+
+    const arrowRotateIndex = useSelector(state => state.arrowRotateIndex);
+    const disableControls = useSelector(state => state.disableControls);
+    /*const rule = useSelector(state => state.rule);*/
 
     const reset = () => {
 
-        setArrowRotateIndex(arrowRotateIndexDefault);
-        setPosX(posXDefault);
-        setPosY(posYDefault);
+        dispatch(
+            setArrowRotateIndex(arrowRotateIndexDefault)
+        );
+        dispatch(
+            setArrowPosX(posXDefault)
+        );
+        dispatch(
+            setArrowPosY(posYDefault)
+        );
     }
 
     useEffect(() => {
@@ -45,34 +52,37 @@ function App() {
     const rotateLeft = () => {
 
         if (arrowRotateIndex === rotateArray.length - 1) {
-            setArrowRotateIndex(0);
+            dispatch(
+                setArrowRotateIndex(0)
+            );
         } else {
-            setArrowRotateIndex(prev => prev + 1);
+            dispatch(
+                setArrowRotateIndex(arrowRotateIndex + 1)
+            );
         }
     }
 
     const rotateRight = () => {
 
         if (arrowRotateIndex === 0) {
-            setArrowRotateIndex(rotateArray.length - 1);
+            dispatch(
+                setArrowRotateIndex(rotateArray.length - 1)
+            );
         } else {
-            setArrowRotateIndex(prev => prev - 1);
+            dispatch(
+                setArrowRotateIndex(arrowRotateIndex - 1)
+            );
         }
     }
 
     const play = () => {
 
-        setDisableControls(true);
-        setArrowShow(false);
-    }
-
-    /**
-     * возвращает код текущего квадрата, где сейчас находится стрелка (напр, 23, 0, 45)
-     */
-
-    const getCurCellCode = () => {
-
-        return map01[posY][posX];
+        dispatch(
+            setDisableControls(true)
+        );
+        dispatch(
+            setArrowShow(false)
+        );
     }
 
   return (
@@ -97,19 +107,19 @@ function App() {
                   <div className={style.field}>
 
                       {
-                          map01.map((item, index) => {
-                              return item.map((val, id) => {
-                                  return <Cell key={index + id} type={val} />
+                          map01.map((item, colIndex) => {
+                              return item.map((val, rowIndex) => {
+
+                                  return <Cell
+                                      key={'' + colIndex + rowIndex}
+                                      type={val}
+                                  />
                               })
                           })
                       }
 
                       <Arrow
-                          rotateIndex={arrowRotateIndex}
-                          posX={posX}
-                          posY={posY}
                           rotateArray={rotateArray}
-                          arrowShow={arrowShow}
                       />
                   </div>
                   <div className={style.controls}>

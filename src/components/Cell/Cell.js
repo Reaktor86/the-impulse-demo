@@ -25,7 +25,7 @@ const Cell = props => {
         <div className={rootStyle.join(' ')}>
             {
                 props.type !== 0 ?
-                    <Filled innerType={innerType} outerType={outerType}/>
+                    <Filled innerType={innerType} outerType={outerType} />
                     : null
             }
         </div>
@@ -125,6 +125,8 @@ const CellMark = props => {
         mark = 'Н';
     } else if (props.innerType === 6 || props.outerType === 6) {
         mark = 'К';
+    } else {
+        mark = '?';
     }
 
     let markStyle;
