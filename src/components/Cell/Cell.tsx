@@ -1,12 +1,14 @@
 import React from 'react';
 import style from './Cell.module.scss';
 import {useSelector} from "react-redux";
+import {ICellMarkProps, ICellProps, IFilledProps} from "../../types";
+import {IRootState} from "../../types";
 
-const Cell = props => {
+const Cell: React.FC<ICellProps> = props => {
 
     const rootStyle = [];
-    let innerType;
-    let outerType;
+    let innerType = 0;
+    let outerType = 0;
 
     if (props.type === 0) {
 
@@ -36,7 +38,7 @@ const Cell = props => {
 export default Cell;
 
 
-const Filled = props => {
+const Filled: React.FC<IFilledProps> = props => {
 
     /*
 0 - пустая клетка
@@ -51,10 +53,10 @@ const Filled = props => {
 
  */
 
-    const arrowPosX = useSelector(state => state.arrowPosX);
-    const arrowPosY = useSelector(state => state.arrowPosY);
-    const rule = useSelector(state => state.rule);
-    const moving = useSelector(state => state.moving);
+    const arrowPosX = useSelector((state: IRootState) => state.arrowPosX);
+    const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
+    const rule = useSelector((state: IRootState) => state.rule);
+    const moving = useSelector((state: IRootState) => state.moving);
 
     const outerStyle1 = [style.outer1];
     const outerStyle2 = [style.outer2];
@@ -156,7 +158,7 @@ const Filled = props => {
     )
 }
 
-const CellMark = props => {
+const CellMark: React.FC<ICellMarkProps> = props => {
 
     let mark;
     if (props.innerType === 5 || props.outerType === 5) {

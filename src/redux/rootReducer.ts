@@ -8,11 +8,13 @@ import {
     SWITCH_RULE
 } from "./actionCreator";
 
-const initialState = {
+import {IRootState} from "../types";
+
+const initialState: IRootState = {
 
     arrowRotateIndex: 0, // индекс для массива с вариантами углов стрелки
-    arrowPosX: 1, // позиция стрелки по X (column)
-    arrowPosY: 8, // позиция стрелки по Y (row)
+    arrowPosX: 1, // позиция стрелки по X (column, 0-9)
+    arrowPosY: 8, // позиция стрелки по Y (row, 0-9)
     arrowShow: true, // показать стрелку
     disableControls: false, // отключить элементы управления
     rule: 'inner', // текущее правило: внутренний квадрат или внешний
@@ -20,7 +22,7 @@ const initialState = {
 
 }
 
-export default function rootReducer(state = initialState, action) {
+export default function rootReducer(state = initialState, action: any): IRootState {
 
     switch (action.type) {
 
@@ -61,7 +63,7 @@ export default function rootReducer(state = initialState, action) {
 
         case SWITCH_RULE: {
 
-            let newState;
+            let newState: 'inner' | 'outer';
             if (state.rule === 'inner') {
                 newState = 'outer';
             } else {

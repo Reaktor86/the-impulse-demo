@@ -12,6 +12,7 @@ import {
     setDisableControls,
     setMoving
 } from "./redux/actionCreator";
+import {IRootState} from "./types";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -26,18 +27,17 @@ const map01 = [
     [43, 0, 0, 0, 0, 0, 0, 0, 0, 41],
 ];
 
-const rotateArray = [0,315,270,225,180,135,90,45];
+const rotateArray: number[] = [0,315,270,225,180,135,90,45];
 const arrowRotateIndexDefault = 0;
 const posXDefault = 1;
 const posYDefault = 8;
 
-function App() {
+const App: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const arrowRotateIndex = useSelector(state => state.arrowRotateIndex);
-    const disableControls = useSelector(state => state.disableControls);
-    /*const rule = useSelector(state => state.rule);*/
+    const arrowRotateIndex = useSelector((state: IRootState) => state.arrowRotateIndex);
+    const disableControls = useSelector((state: IRootState) => state.disableControls);
 
     const reset = () => {
 
