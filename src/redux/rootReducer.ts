@@ -2,24 +2,29 @@ import {
     SET_ARROW_POS_X,
     SET_ARROW_POS_Y,
     SET_ARROW_ROTATE_INDEX,
-    SET_ARROW_SHOW,
+    SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING,
+    SET_MOVING, SET_POS_X, SET_POS_Y,
     SWITCH_RULE
 } from "./actionCreator";
 
 import {IRootState} from "../types";
 
+const posXDefault = 1;
+const posYDefault = 8;
+
 const initialState: IRootState = {
 
     arrowRotateIndex: 0, // индекс для массива с вариантами углов стрелки
-    arrowPosX: 1, // позиция стрелки по X (column, 0-9)
-    arrowPosY: 8, // позиция стрелки по Y (row, 0-9)
+    arrowPosX: posXDefault, // позиция стрелки по X (column, 0-9)
+    arrowPosY: posYDefault, // позиция стрелки по Y (row, 0-9)
     arrowShow: true, // показать стрелку
     disableControls: false, // отключить элементы управления
     rule: 'inner', // текущее правило: внутренний квадрат или внешний
     moving: false, // совершается движение в данный момент
-
+    posX: posXDefault, // позиция движущегося квадрата по X (column, 0-9)
+    posY: posYDefault, // позиция движущегося квадрата по Y (column, 0-9)
+    currentColor: 0, // текущий цвет (тот, что мерцает)
 }
 
 export default function rootReducer(state = initialState, action: any): IRootState {
@@ -44,6 +49,20 @@ export default function rootReducer(state = initialState, action: any): IRootSta
             return {
                 ...state,
                 arrowPosY: action.payload,
+            }
+        }
+
+        case SET_POS_X: {
+            return {
+                ...state,
+                posX: action.payload,
+            }
+        }
+
+        case SET_POS_Y: {
+            return {
+                ...state,
+                posY: action.payload,
             }
         }
 
@@ -80,6 +99,13 @@ export default function rootReducer(state = initialState, action: any): IRootSta
             return {
                 ...state,
                 moving: action.payload,
+            }
+        }
+
+        case SET_CURRENT_COLOR: {
+            return {
+                ...state,
+                currentColor: action.payload,
             }
         }
 

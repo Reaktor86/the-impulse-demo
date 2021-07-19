@@ -8,11 +8,12 @@ import {
     setArrowPosX,
     setArrowPosY,
     setArrowRotateIndex,
-    setArrowShow,
+    setArrowShow, setCurrentColor,
     setDisableControls,
-    setMoving
+    setMoving, setPosX
 } from "./redux/actionCreator";
 import {IRootState} from "./types";
+import CellMoving from "./components/Cell/CellMoving";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -38,6 +39,9 @@ const App: React.FC = () => {
 
     const arrowRotateIndex = useSelector((state: IRootState) => state.arrowRotateIndex);
     const disableControls = useSelector((state: IRootState) => state.disableControls);
+    const arrowPosX = useSelector((state: IRootState) => state.arrowPosX);
+    const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
+    const rule = useSelector((state: IRootState) => state.rule);
 
     const reset = () => {
 
@@ -84,6 +88,20 @@ const App: React.FC = () => {
 
     const play = () => {
 
+        // вернуть текущий цвет
+
+        let color = map01[arrowPosY][arrowPosX];
+        if (rule === 'inner') {
+            color = color % 10;
+        } else {
+            color = Math.floor(color / 10);
+        }
+
+        console.log('color из кнопки play = ', color);
+
+        dispatch(
+            setCurrentColor(color)
+        );
         dispatch(
             setDisableControls(true)
         );
@@ -93,9 +111,12 @@ const App: React.FC = () => {
         dispatch(
             setMoving(true)
         );
+        dispatch(
+            setPosX(2)
+        );
     }
 
-  return (
+    return (
       <div className="App">
 
           <header>
@@ -122,7 +143,7 @@ const App: React.FC = () => {
 
                                   return <Cell
                                       key={'' + colIndex + rowIndex}
-                                      id={'' + colIndex + rowIndex}
+                                      cords={'' + colIndex + rowIndex}
                                       type={val}
                                   />
                               })
@@ -131,6 +152,10 @@ const App: React.FC = () => {
 
                       <Arrow
                           rotateArray={rotateArray}
+                      />
+
+                      <CellMoving
+                        matrix={map01}
                       />
                   </div>
                   <div className={style.controls}>

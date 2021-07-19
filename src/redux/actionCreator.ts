@@ -7,6 +7,9 @@ export const SET_DISABLE_CONTROLS = 'SET_DISABLE_CONTROLS';
 export const SET_ARROW_SHOW = 'SET_ARROW_SHOW';
 export const SWITCH_RULE = 'SWITCH_RULE';
 export const SET_MOVING = 'SET_MOVING';
+export const SET_POS_X = 'SET_POS_X';
+export const SET_POS_Y = 'SET_POS_Y';
+export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR';
 
 export function setArrowRotateIndex(index: number): TypeSetNumber {
     return {
@@ -26,6 +29,27 @@ export function setArrowPosY(y: number): TypeSetNumber {
     return {
         type: SET_ARROW_POS_Y,
         payload: y,
+    }
+}
+
+export function setPosX(x: number): TypeSetNumber {
+    return {
+        type: SET_POS_X,
+        payload: x,
+    }
+}
+
+export function setPosY(y: number): TypeSetNumber {
+    return {
+        type: SET_POS_Y,
+        payload: y,
+    }
+}
+
+export function setCurrentColor(num: number): TypeSetNumber {
+    return {
+        type: SET_CURRENT_COLOR,
+        payload: num,
     }
 }
 

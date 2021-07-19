@@ -2,9 +2,9 @@ import {
     SET_ARROW_POS_X,
     SET_ARROW_POS_Y,
     SET_ARROW_ROTATE_INDEX,
-    SET_ARROW_SHOW,
+    SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING,
+    SET_MOVING, SET_POS_X, SET_POS_Y,
     SWITCH_RULE
 } from "./redux/actionCreator";
 
@@ -17,6 +17,9 @@ export interface IRootState {
     disableControls: boolean
     rule: 'inner' | 'outer'
     moving: boolean
+    posX: number
+    posY: number
+    currentColor: number
 }
 
 // actions
@@ -31,8 +34,23 @@ interface ISetArrowPosY {
     payload: number
 }
 
+interface ISetPosX {
+    type: typeof SET_POS_X
+    payload: number
+}
+
+interface ISetPosY {
+    type: typeof SET_POS_Y
+    payload: number
+}
+
 interface ISetArrowRotateIndex {
     type: typeof SET_ARROW_ROTATE_INDEX
+    payload: number
+}
+
+interface ISetCurrentColor {
+    type: typeof SET_CURRENT_COLOR
     payload: number
 }
 
@@ -55,7 +73,7 @@ export interface ISwitchRule {
     type: typeof SWITCH_RULE
 }
 
-export type TypeSetNumber = ISetArrowPosX | ISetArrowPosY | ISetArrowRotateIndex;
+export type TypeSetNumber = ISetArrowPosX | ISetArrowPosY | ISetArrowRotateIndex | ISetPosX | ISetPosY | ISetCurrentColor;
 export type TypeSetBoolean = ISetArrowShow | ISetDisableControls | ISetMoving;
 
 // props
@@ -66,13 +84,13 @@ export interface IArrowProps {
 
 export interface ICellProps {
     type: number
-    id: string
+    cords: string
 }
 
 export interface IFilledProps {
     innerType: number
     outerType: number
-    id: string
+    cords: string
 }
 
 export interface ICellMarkProps {
@@ -80,3 +98,6 @@ export interface ICellMarkProps {
     outerType: number
 }
 
+export interface ICellMovingProps {
+    matrix: number[][]
+}

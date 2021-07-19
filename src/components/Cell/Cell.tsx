@@ -28,7 +28,7 @@ const Cell: React.FC<ICellProps> = props => {
         <div className={rootStyle.join(' ')}>
             {
                 props.type !== 0 ?
-                    <Filled innerType={innerType} outerType={outerType} id={props.id}/>
+                    <Filled innerType={innerType} outerType={outerType} cords={props.cords}/>
                     : null
             }
         </div>
@@ -57,6 +57,8 @@ const Filled: React.FC<IFilledProps> = props => {
     const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
     const rule = useSelector((state: IRootState) => state.rule);
     const moving = useSelector((state: IRootState) => state.moving);
+
+    // стили для статичного квадрата
 
     const outerStyle1 = [style.outer1];
     const outerStyle2 = [style.outer2];
@@ -113,7 +115,7 @@ const Filled: React.FC<IFilledProps> = props => {
 
         // анимировать ли квадрат. Если да, то внутренний или наружний
 
-        if (props.id === '' + arrowPosY + arrowPosX) {
+        if (props.cords === '' + arrowPosY + arrowPosX) {
 
             if (moving) {
 
@@ -143,6 +145,9 @@ const Filled: React.FC<IFilledProps> = props => {
     }
 
     return (
+
+        // статичный квадрат
+
         <>
             <div className={outerStyle1.join(' ')}></div>
             <div className={outerStyle2.join(' ')}></div>
@@ -160,13 +165,11 @@ const Filled: React.FC<IFilledProps> = props => {
 
 const CellMark: React.FC<ICellMarkProps> = props => {
 
-    let mark;
+    let mark = '?';
     if (props.innerType === 5 || props.outerType === 5) {
         mark = 'Н';
     } else if (props.innerType === 6 || props.outerType === 6) {
         mark = 'К';
-    } else {
-        mark = '?';
     }
 
     let markStyle;

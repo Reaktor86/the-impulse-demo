@@ -97,6 +97,13 @@ $white: #fff;
   opacity: 0;
 }
 
+.cell__moving {
+  @include cell();
+  transition: top, left .2s linear;
+  position: absolute;
+  z-index: 10;
+}
+
 @keyframes flicker {
   from {
     opacity: 0;
