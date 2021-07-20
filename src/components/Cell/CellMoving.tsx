@@ -1,13 +1,11 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import style from './Cell.module.scss';
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {ICellMovingProps, IRootState} from "../../types";
-import {setCurrentColor} from "../../redux/actionCreator";
 
 const CellMoving: React.FC<ICellMovingProps> = props => {
 
     const ref = useRef<HTMLDivElement|null>(null);
-    const dispatch = useDispatch();
     const { posX, posY, moving, currentColor, rule } = useSelector((state: IRootState) => state);
 
     // управление стилями

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useEffect} from "react";
 import style from './App.module.scss';
 import Stat from "./components/Stat/Stat";
 import Cell from "./components/Cell/Cell";
@@ -10,7 +10,7 @@ import {
     setArrowRotateIndex,
     setArrowShow, setCurrentColor,
     setDisableControls,
-    setMoving, setPos,
+    setMoving, setPos, switchRule,
 } from "./redux/actionCreator";
 import {IRootState, TypeRule} from "./types";
 import CellMoving from "./components/Cell/CellMoving";
@@ -51,9 +51,6 @@ const App: React.FC = () => {
         dispatch(
             setPos(posXDefault, posYDefault)
         );
-        dispatch(
-            setCurrentColor(getColor(arrowPosX, arrowPosY))
-        );
     }
 
     useEffect(() => {
@@ -88,6 +85,8 @@ const App: React.FC = () => {
 
     const play = () => {
 
+        let newColor: number = getColor(arrowPosX, arrowPosY);
+
         dispatch(
             setDisableControls(true)
         );
@@ -97,8 +96,11 @@ const App: React.FC = () => {
         dispatch(
             setMoving(true)
         );
+        dispatch(
+            setCurrentColor(newColor)
+        );
 
-        makeStep(posX, posY);
+        makeStep(posX, posY, newColor);
     }
 
 
@@ -108,7 +110,7 @@ const App: React.FC = () => {
      * @param oldY
      */
 
-    const makeStep = (oldX: number, oldY: number) => {
+    const makeStep = (oldX: number, oldY: number, newColor: number) => {
 
         // Узнать новую позицию
 
@@ -162,20 +164,6 @@ const App: React.FC = () => {
         - другой квадрат
          */
 
-        if (map01[y][x] === 0) {
-
-            // пустота
-
-            console.log('пустота');
-            setTimeout(() => {
-                makeStep(x, y);
-            }, cellTransition)
-            dispatch(
-                setPos(x, y)
-            );
-            return;
-        }
-
         if (x < 0 || x > 9 || y < 0 || y > 9) {
 
             // врезался в стену
@@ -188,6 +176,20 @@ const App: React.FC = () => {
             dispatch(
                 setResult('wall') // async
             );
+            dispatch(
+                setPos(x, y)
+            );
+            return;
+        }
+
+        if (map01[y][x] === 0) {
+
+            // пустота
+
+            console.log('пустота');
+            setTimeout(() => {
+                makeStep(x, y, newColor);
+            }, cellTransition)
             dispatch(
                 setPos(x, y)
             );
@@ -214,7 +216,9 @@ const App: React.FC = () => {
             inner: goalCell % 10,
             outer: Math.floor(goalCell / 10),
         }
-        if (currentColor === color[rule]) {
+        console.log('определены цвета целевой клетки = ', color);
+        console.log('newColor = ', newColor)
+        if (newColor === color[rule]) {
 
             console.log('цвета совпали');
 
@@ -239,14 +243,42 @@ const App: React.FC = () => {
                 );
             } else {
 
+                // правильный ход
                 console.log('правильный ход');
+                setTimeout(() => {
+                    moveIsOver(x, y);
+                }, cellTransition)
             }
 
             return;
         }
 
+        // неверный цвет
         dispatch(
             setResult('wrongColor') // async
+        );
+    }
+
+    /**
+     * ход закончен, теперь ходим из нового квадрата
+     */
+
+    const moveIsOver = (newX: number, newY: number) => {
+
+        dispatch(
+            setMoving(false)
+        );
+        dispatch(
+            switchRule()
+        );
+        dispatch(
+            setArrowShow(true)
+        );
+        dispatch(
+            setArrowPos(newX, newY)
+        );
+        dispatch(
+            setDisableControls(false)
         );
     }
 
@@ -261,6 +293,7 @@ const App: React.FC = () => {
             color = Math.floor(color / 10);
         }
 
+        console.log('определен цвет: ', color)
         return color;
     }
 
@@ -337,3 +370,5 @@ const App: React.FC = () => {
 }
 
 export default App;
+
+// TODO: рефакторить в классовый

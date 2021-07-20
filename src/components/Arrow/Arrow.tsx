@@ -13,8 +13,12 @@ const Arrow: React.FC<IArrowProps> = props => {
     useEffect(() => {
 
         // при изменении rotateIndex
-        console.log('rotateIndex = ', arrowRotateIndex);
         setRotate(props.rotateArray[arrowRotateIndex]);
+    }, [arrowRotateIndex, arrowShow])
+
+    useEffect(() => {
+
+        console.log('rotateIndex = ', arrowRotateIndex);
     }, [arrowRotateIndex])
 
     useEffect(() => {
@@ -23,7 +27,7 @@ const Arrow: React.FC<IArrowProps> = props => {
         if (arrowRef.current) {
             arrowRef.current.style.left = arrowPosX * 10 + '%';
         }
-    }, [arrowPosX])
+    }, [arrowPosX, arrowShow])
 
     useEffect(() => {
 
@@ -31,7 +35,7 @@ const Arrow: React.FC<IArrowProps> = props => {
         if (arrowRef.current) {
             arrowRef.current.style.top = arrowPosY * 10 + '%';
         }
-    }, [arrowPosY])
+    }, [arrowPosY, arrowShow])
 
     const setRotate = (deg: number) => {
 
