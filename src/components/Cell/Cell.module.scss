@@ -47,14 +47,22 @@ $white: #fff;
   bottom: 0;
 }
 
-.inner {
+@mixin inner() {
   width: 44%;
   height: 44%;
   position: absolute;
   left: 28%;
   top: 28%;
   z-index: 1;
+}
+
+.inner {
+  @include inner();
   border: 1px solid black;
+}
+
+.inner_no_border {
+  @include inner();
 }
 
 .outer__p {
@@ -99,7 +107,8 @@ $white: #fff;
 
 .cell__moving {
   @include cell();
-  transition: top, left .2s linear;
+  transition: .2s linear;
+  transition-property: top, left;
   position: absolute;
   z-index: 10;
 }

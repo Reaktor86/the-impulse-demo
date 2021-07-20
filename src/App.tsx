@@ -5,14 +5,14 @@ import Cell from "./components/Cell/Cell";
 import Arrow from "./components/Arrow/Arrow";
 import {useSelector, useDispatch} from "react-redux";
 import {
-    setArrowPosX,
-    setArrowPosY,
+    setResult,
+    setArrowPos,
     setArrowRotateIndex,
     setArrowShow, setCurrentColor,
     setDisableControls,
-    setMoving, setPosX
+    setMoving, setPos,
 } from "./redux/actionCreator";
-import {IRootState} from "./types";
+import {IRootState, TypeRule} from "./types";
 import CellMoving from "./components/Cell/CellMoving";
 
 const map01 = [
@@ -28,20 +28,17 @@ const map01 = [
     [43, 0, 0, 0, 0, 0, 0, 0, 0, 41],
 ];
 
-const rotateArray: number[] = [0,315,270,225,180,135,90,45];
+const rotateArray: number[] = [0,315,270,225,180,135,90,45]; // углы вращения стрелки
 const arrowRotateIndexDefault = 0;
-const posXDefault = 1;
-const posYDefault = 8;
+export const posXDefault = 1; // координаты по умолчанию
+export const posYDefault = 8;
+export const cellTransition = 200; // css transition для движущейся клетки, ms
 
 const App: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const arrowRotateIndex = useSelector((state: IRootState) => state.arrowRotateIndex);
-    const disableControls = useSelector((state: IRootState) => state.disableControls);
-    const arrowPosX = useSelector((state: IRootState) => state.arrowPosX);
-    const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
-    const rule = useSelector((state: IRootState) => state.rule);
+    const { arrowRotateIndex, disableControls, arrowPosX, arrowPosY, rule, posX, posY, currentColor } = useSelector((state: IRootState) => state);
 
     const reset = () => {
 
@@ -49,10 +46,13 @@ const App: React.FC = () => {
             setArrowRotateIndex(arrowRotateIndexDefault)
         );
         dispatch(
-            setArrowPosX(posXDefault)
+            setArrowPos(posXDefault, posYDefault)
         );
         dispatch(
-            setArrowPosY(posYDefault)
+            setPos(posXDefault, posYDefault)
+        );
+        dispatch(
+            setCurrentColor(getColor(arrowPosX, arrowPosY))
         );
     }
 
@@ -88,20 +88,6 @@ const App: React.FC = () => {
 
     const play = () => {
 
-        // вернуть текущий цвет
-
-        let color = map01[arrowPosY][arrowPosX];
-        if (rule === 'inner') {
-            color = color % 10;
-        } else {
-            color = Math.floor(color / 10);
-        }
-
-        console.log('color из кнопки play = ', color);
-
-        dispatch(
-            setCurrentColor(color)
-        );
         dispatch(
             setDisableControls(true)
         );
@@ -111,9 +97,171 @@ const App: React.FC = () => {
         dispatch(
             setMoving(true)
         );
+
+        makeStep(posX, posY);
+    }
+
+
+    /**
+     * ОСТОРОЖНО! В какой-то момен makeStep вызывает саму себя
+     * @param oldX
+     * @param oldY
+     */
+
+    const makeStep = (oldX: number, oldY: number) => {
+
+        // Узнать новую позицию
+
+        let x = oldX;
+        let y = oldY;
+
+        switch (arrowRotateIndex) {
+            case 0: {
+                x++;
+                break;
+            }
+            case 1: {
+                x++;
+                y--;
+                break;
+            }
+            case 2: {
+                y--;
+                break;
+            }
+            case 3: {
+                x--;
+                y--;
+                break;
+            }
+            case 4: {
+                x--;
+                break;
+            }
+            case 5: {
+                x--;
+                y++;
+                break;
+            }
+            case 6: {
+                y++;
+                break;
+            }
+            case 7: {
+                x++;
+                y++;
+                break;
+            }
+        }
+
+        /*
+        Пока квадрат едет, определить, что его ожидает на предсказанной координате
+        Варианты:
+        - пустота (в этом случае функция активирует саму себя ещё раз)
+        - стена - промах
+        - другой квадрат
+         */
+
+        if (map01[y][x] === 0) {
+
+            // пустота
+
+            console.log('пустота');
+            setTimeout(() => {
+                makeStep(x, y);
+            }, cellTransition)
+            dispatch(
+                setPos(x, y)
+            );
+            return;
+        }
+
+        if (x < 0 || x > 9 || y < 0 || y > 9) {
+
+            // врезался в стену
+
+            if (x < 0) x += 0.5;
+            if (x > 9) x -= 0.5;
+            if (y < 0) y += 0.5;
+            if (y > 9) y -= 0.5;
+
+            dispatch(
+                setResult('wall') // async
+            );
+            dispatch(
+                setPos(x, y)
+            );
+            return;
+        }
+
         dispatch(
-            setPosX(2)
+            setPos(x, y)
         );
+
+        /*
+         Предсказан другой квадрат.
+         Сопоставить цвета.
+
+         Цвета совпадают:
+        - узнать тип клетки
+        - старт: промах, финиш: выиграл, обычная: правильный ход
+        Цвета не совпадают:
+        - промах
+         */
+
+        let goalCell = map01[y][x];
+        let color = {
+            inner: goalCell % 10,
+            outer: Math.floor(goalCell / 10),
+        }
+        if (currentColor === color[rule]) {
+
+            console.log('цвета совпали');
+
+            let testNew: TypeRule;
+            if (rule === 'inner') {
+                testNew = 'outer';
+            } else {
+                testNew = 'inner';
+            }
+
+            if (color[testNew] === 5) {
+
+                // врезался в старт
+                dispatch(
+                    setResult('start') // async
+                );
+            } else if (color[testNew] === 6) {
+
+                // финишировал
+                dispatch(
+                    setResult('win') // async
+                );
+            } else {
+
+                console.log('правильный ход');
+            }
+
+            return;
+        }
+
+        dispatch(
+            setResult('wrongColor') // async
+        );
+    }
+
+    const getColor = (x: number, y: number): number => {
+
+        // вернуть цвет
+
+        let color = map01[y][x];
+        if (rule === 'inner') {
+            color = color % 10;
+        } else {
+            color = Math.floor(color / 10);
+        }
+
+        return color;
     }
 
     return (

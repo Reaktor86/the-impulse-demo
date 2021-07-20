@@ -1,12 +1,13 @@
 import {
-    SET_ARROW_POS_X,
-    SET_ARROW_POS_Y,
+    SET_ARROW_POS,
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING, SET_POS_X, SET_POS_Y,
+    SET_MOVING, SET_POS, SHOW_RESULT,
     SWITCH_RULE
 } from "./redux/actionCreator";
+
+export type TypeRule = 'inner' | 'outer'
 
 export interface IRootState {
 
@@ -15,7 +16,7 @@ export interface IRootState {
     arrowPosY: number
     arrowShow: boolean
     disableControls: boolean
-    rule: 'inner' | 'outer'
+    rule: TypeRule
     moving: boolean
     posX: number
     posY: number
@@ -24,24 +25,20 @@ export interface IRootState {
 
 // actions
 
-interface ISetArrowPosX {
-    type: typeof SET_ARROW_POS_X
-    payload: number
+export interface ISetArrowPos {
+    type: typeof SET_ARROW_POS
+    payload: {
+        x?: number,
+        y?: number,
+    }
 }
 
-interface ISetArrowPosY {
-    type: typeof SET_ARROW_POS_Y
-    payload: number
-}
-
-interface ISetPosX {
-    type: typeof SET_POS_X
-    payload: number
-}
-
-interface ISetPosY {
-    type: typeof SET_POS_Y
-    payload: number
+export interface ISetPos {
+    type: typeof SET_POS
+    payload: {
+        x?: number,
+        y?: number,
+    }
 }
 
 interface ISetArrowRotateIndex {
@@ -73,8 +70,14 @@ export interface ISwitchRule {
     type: typeof SWITCH_RULE
 }
 
-export type TypeSetNumber = ISetArrowPosX | ISetArrowPosY | ISetArrowRotateIndex | ISetPosX | ISetPosY | ISetCurrentColor;
+export interface IShowResult {
+    type: typeof SHOW_RESULT
+    payload: TypeResult
+}
+
+export type TypeSetNumber = ISetArrowRotateIndex | ISetCurrentColor;
 export type TypeSetBoolean = ISetArrowShow | ISetDisableControls | ISetMoving;
+export type TypeCords = ISetArrowPos | ISetPos;
 
 // props
 
@@ -101,3 +104,7 @@ export interface ICellMarkProps {
 export interface ICellMovingProps {
     matrix: number[][]
 }
+
+// разное
+
+export type TypeResult = 'wall' | 'wrongColor' | 'start' | 'win'

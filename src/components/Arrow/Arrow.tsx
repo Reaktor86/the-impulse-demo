@@ -8,10 +8,7 @@ const Arrow: React.FC<IArrowProps> = props => {
 
     const arrowRef = useRef<HTMLImageElement|null>(null);
 
-    const arrowRotateIndex = useSelector((state: IRootState) => state.arrowRotateIndex);
-    const arrowPosX = useSelector((state: IRootState) => state.arrowPosX);
-    const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
-    const arrowShow = useSelector((state: IRootState) => state.arrowShow);
+    const { arrowRotateIndex, arrowPosX, arrowPosY, arrowShow } = useSelector((state: IRootState) => state);
 
     useEffect(() => {
 

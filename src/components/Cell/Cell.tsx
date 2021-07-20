@@ -53,10 +53,7 @@ const Filled: React.FC<IFilledProps> = props => {
 
  */
 
-    const arrowPosX = useSelector((state: IRootState) => state.arrowPosX);
-    const arrowPosY = useSelector((state: IRootState) => state.arrowPosY);
-    const rule = useSelector((state: IRootState) => state.rule);
-    const moving = useSelector((state: IRootState) => state.moving);
+    const { arrowPosX, arrowPosY, rule, moving } = useSelector((state: IRootState) => state);
 
     // стили для статичного квадрата
 

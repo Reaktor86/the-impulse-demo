@@ -1,15 +1,16 @@
-import {TypeSetNumber, TypeSetBoolean, ISwitchRule} from "../types";
+import {TypeSetNumber, TypeSetBoolean, ISwitchRule, TypeCords, TypeResult, IShowResult} from "../types";
+
+import {cellTransition} from '../App';
 
 export const SET_ARROW_ROTATE_INDEX = 'SET_ARROW_ROTATE_INDEX';
-export const SET_ARROW_POS_X = 'SET_ARROW_POS_X';
-export const SET_ARROW_POS_Y = 'SET_ARROW_POS_Y';
+export const SET_ARROW_POS = 'SET_ARROW_POS';
 export const SET_DISABLE_CONTROLS = 'SET_DISABLE_CONTROLS';
 export const SET_ARROW_SHOW = 'SET_ARROW_SHOW';
 export const SWITCH_RULE = 'SWITCH_RULE';
 export const SET_MOVING = 'SET_MOVING';
-export const SET_POS_X = 'SET_POS_X';
-export const SET_POS_Y = 'SET_POS_Y';
+export const SET_POS = 'SET_POS';
 export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR';
+export const SHOW_RESULT = 'SHOW_RESULT';
 
 export function setArrowRotateIndex(index: number): TypeSetNumber {
     return {
@@ -18,31 +19,23 @@ export function setArrowRotateIndex(index: number): TypeSetNumber {
     }
 }
 
-export function setArrowPosX(x: number): TypeSetNumber {
+export function setArrowPos(x?: number, y?: number): TypeCords {
     return {
-        type: SET_ARROW_POS_X,
-        payload: x,
+        type: SET_ARROW_POS,
+        payload: {
+            x: x,
+            y: y,
+        },
     }
 }
 
-export function setArrowPosY(y: number): TypeSetNumber {
+export function setPos(x?: number, y?: number): TypeCords {
     return {
-        type: SET_ARROW_POS_Y,
-        payload: y,
-    }
-}
-
-export function setPosX(x: number): TypeSetNumber {
-    return {
-        type: SET_POS_X,
-        payload: x,
-    }
-}
-
-export function setPosY(y: number): TypeSetNumber {
-    return {
-        type: SET_POS_Y,
-        payload: y,
+        type: SET_POS,
+        payload: {
+            x: x,
+            y: y,
+        },
     }
 }
 
@@ -77,5 +70,22 @@ export function setMoving(value: boolean): TypeSetBoolean {
     return {
         type: SET_MOVING,
         payload: value,
+    }
+}
+
+export function setResult(type: TypeResult) {
+    return (dispatch: any) => {
+        setTimeout(() => {
+            dispatch(
+                showResult(type)
+            );
+        }, cellTransition)
+    }
+}
+
+export function showResult(type: TypeResult): IShowResult {
+    return {
+        type: SHOW_RESULT,
+        payload: type,
     }
 }

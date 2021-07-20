@@ -1,17 +1,16 @@
 import {
-    SET_ARROW_POS_X,
-    SET_ARROW_POS_Y,
+    SET_ARROW_POS,
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING, SET_POS_X, SET_POS_Y,
+    SET_MOVING, SET_POS, SHOW_RESULT,
     SWITCH_RULE
 } from "./actionCreator";
 
 import {IRootState} from "../types";
 
-const posXDefault = 1;
-const posYDefault = 8;
+import {posXDefault} from '../App';
+import {posYDefault} from '../App';
 
 const initialState: IRootState = {
 
@@ -38,31 +37,27 @@ export default function rootReducer(state = initialState, action: any): IRootSta
             }
         }
 
-        case SET_ARROW_POS_X: {
+        case SET_ARROW_POS: {
+
+            const x = action.payload.x !== undefined ? action.payload.x : state.arrowPosX;
+            const y = action.payload.y !== undefined ? action.payload.y : state.arrowPosY;
+
             return {
                 ...state,
-                arrowPosX: action.payload,
+                arrowPosX: x,
+                arrowPosY: y,
             }
         }
 
-        case SET_ARROW_POS_Y: {
-            return {
-                ...state,
-                arrowPosY: action.payload,
-            }
-        }
+        case SET_POS: {
 
-        case SET_POS_X: {
-            return {
-                ...state,
-                posX: action.payload,
-            }
-        }
+            const x = action.payload.x !== undefined ? action.payload.x : state.posX;
+            const y = action.payload.y !== undefined ? action.payload.y : state.posY;
 
-        case SET_POS_Y: {
             return {
                 ...state,
-                posY: action.payload,
+                posX: x,
+                posY: y,
             }
         }
 
@@ -106,6 +101,15 @@ export default function rootReducer(state = initialState, action: any): IRootSta
             return {
                 ...state,
                 currentColor: action.payload,
+            }
+        }
+
+        case SHOW_RESULT: {
+
+            console.log('РЕЗУЛЬТАТ: ', action.payload);
+
+            return {
+                ...state,
             }
         }
 

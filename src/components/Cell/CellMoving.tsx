@@ -8,17 +8,47 @@ const CellMoving: React.FC<ICellMovingProps> = props => {
 
     const ref = useRef<HTMLDivElement|null>(null);
     const dispatch = useDispatch();
+    const { posX, posY, moving, currentColor, rule } = useSelector((state: IRootState) => state);
 
-    const movingStyles = [style.cell__moving];
+    // управление стилями
 
-    // позиция полностью повторяет позицию стрелки
+    const outerStyle1 = [style.outer1];
+    const outerStyle2 = [style.outer2];
+    const outerStyle3 = [style.outer3];
+    const outerStyle4 = [style.outer4];
+    const innerStyle = [style.inner_no_border];
+    let color = style.white;
 
-    const posX = useSelector((state: IRootState) => state.posX);
-    const posY = useSelector((state: IRootState) => state.posY);
-    const moving = useSelector((state: IRootState) => state.moving);
-    const currentColor = useSelector((state: IRootState) => state.currentColor);
+    switch (currentColor) {
+
+        /*
+        1 - желтый
+        2 - зеленый
+        3 - синий
+        4 - красный
+         */
+
+        case 1:
+            color = style.yellow;
+            break;
+        case 2:
+            color = style.green;
+            break;
+        case 3:
+            color = style.blue;
+            break;
+        case 4:
+            color = style.red;
+    }
+
+    outerStyle1.push(color);
+    outerStyle2.push(color);
+    outerStyle3.push(color);
+    outerStyle4.push(color);
+    innerStyle.push(color);
 
     useEffect(() => {
+
         // при изменении позиции X
         if (ref.current) {
             ref.current.style.left = posX * 10 + '%';
@@ -35,44 +65,8 @@ const CellMoving: React.FC<ICellMovingProps> = props => {
 
     useEffect(() => {
 
-        // при изнменении текущего цвета
-
-        let color = style.white;
-
-        switch (currentColor) {
-
-            /*
-            1 - желтый
-            2 - зеленый
-            3 - синий
-            4 - красный
-             */
-
-            case 1:
-                color = style.yellow;
-                break;
-            case 2:
-                color = style.green;
-                break;
-            case 3:
-                color = style.blue;
-                break;
-            case 4:
-                color = style.red;
-        }
-
-        movingStyles.push(color);
-
-        console.log('movingStyles запуск из useEffect = ', movingStyles)
-
-    }, [currentColor])
-
-    useEffect(() => {
-
         // при начале или завершении движения
         if (ref.current) {
-
-            console.log('проверка moving')
             if (moving) {
                 ref.current.style.opacity = '1';
             } else {
@@ -83,15 +77,20 @@ const CellMoving: React.FC<ICellMovingProps> = props => {
     }, [moving])
 
     return (
-        <div className={movingStyles.join(' ')} ref={ref}>
 
+        <div className={style.cell__moving} ref={ref}>
+            {
+                rule === 'outer' ?
+                    <>
+                    <div className={outerStyle1.join(' ')}></div>
+                    <div className={outerStyle2.join(' ')}></div>
+                <div className={outerStyle3.join(' ')}></div>
+                <div className={outerStyle4.join(' ')}></div>
+                    </>
+                    : <div className={innerStyle.join(' ')}></div>
+            }
         </div>
     )
 }
 
 export default CellMoving;
-
-/*
-надо скопировать мерцающую деталь в div
-для этого надо знать: цвет детали, внут/внешняя
- */

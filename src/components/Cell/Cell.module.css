@@ -49,6 +49,15 @@
   border: 1px solid black;
 }
 
+.inner_no_border {
+  width: 44%;
+  height: 44%;
+  position: absolute;
+  left: 28%;
+  top: 28%;
+  z-index: 1;
+}
+
 .outer__p {
   margin: 0;
   position: absolute;
@@ -93,7 +102,8 @@
   width: 10%;
   height: 10%;
   position: relative;
-  transition: top, left 0.2s linear;
+  transition: 0.2s linear;
+  transition-property: top, left;
   position: absolute;
   z-index: 10;
 }
