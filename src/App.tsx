@@ -10,10 +10,11 @@ import {
     setArrowRotateIndex,
     setArrowShow, setCurrentColor,
     setDisableControls,
-    setMoving, setPos, switchRule,
+    setMoving, setPos, switchRule, setSteps,
 } from "./redux/actionCreator";
 import {IRootState, TypeRule} from "./types";
 import CellMoving from "./components/Cell/CellMoving";
+import Result from "./components/Result/Result";
 
 const map01 = [
     [23, 0, 0, 0, 0, 0, 0, 21, 0, 0],
@@ -38,7 +39,7 @@ const App: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const { arrowRotateIndex, disableControls, arrowPosX, arrowPosY, rule, posX, posY, currentColor } = useSelector((state: IRootState) => state);
+    const { arrowRotateIndex, disableControls, arrowPosX, arrowPosY, rule, posX, posY } = useSelector((state: IRootState) => state);
 
     const reset = () => {
 
@@ -100,66 +101,68 @@ const App: React.FC = () => {
             setCurrentColor(newColor)
         );
 
-        makeStep(posX, posY, newColor);
+        makeMove(newColor);
     }
 
-
-    /**
-     * ОСТОРОЖНО! В какой-то момен makeStep вызывает саму себя
-     * @param oldX
-     * @param oldY
-     */
-
-    const makeStep = (oldX: number, oldY: number, newColor: number) => {
+    const makeMove = (newColor: number) => {
 
         // Узнать новую позицию
 
-        let x = oldX;
-        let y = oldY;
+        let x = posX;
+        let y = posY;
+        let steps = 0;
 
-        switch (arrowRotateIndex) {
-            case 0: {
-                x++;
-                break;
+        do {
+            steps++;
+            switch (arrowRotateIndex) {
+                case 0: {
+                    x++;
+                    break;
+                }
+                case 1: {
+                    x++;
+                    y--;
+                    break;
+                }
+                case 2: {
+                    y--;
+                    break;
+                }
+                case 3: {
+                    x--;
+                    y--;
+                    break;
+                }
+                case 4: {
+                    x--;
+                    break;
+                }
+                case 5: {
+                    x--;
+                    y++;
+                    break;
+                }
+                case 6: {
+                    y++;
+                    break;
+                }
+                case 7: {
+                    x++;
+                    y++;
+                    break;
+                }
             }
-            case 1: {
-                x++;
-                y--;
-                break;
-            }
-            case 2: {
-                y--;
-                break;
-            }
-            case 3: {
-                x--;
-                y--;
-                break;
-            }
-            case 4: {
-                x--;
-                break;
-            }
-            case 5: {
-                x--;
-                y++;
-                break;
-            }
-            case 6: {
-                y++;
-                break;
-            }
-            case 7: {
-                x++;
-                y++;
-                break;
-            }
-        }
+
+            // если на новой позиции пустая клетка и не стена, то цикл повторится
+        } while (map01[y][x] === 0 && !(x < 0 || x > 9 || y < 0 || y > 9))
+
+        dispatch(
+            setSteps(steps)
+        );
 
         /*
         Пока квадрат едет, определить, что его ожидает на предсказанной координате
         Варианты:
-        - пустота (в этом случае функция активирует саму себя ещё раз)
         - стена - промах
         - другой квадрат
          */
@@ -174,25 +177,12 @@ const App: React.FC = () => {
             if (y > 9) y -= 0.5;
 
             dispatch(
-                setResult('wall') // async
+                setResult('wall', steps) // async
             );
             dispatch(
                 setPos(x, y)
             );
-            return;
-        }
 
-        if (map01[y][x] === 0) {
-
-            // пустота
-
-            console.log('пустота');
-            setTimeout(() => {
-                makeStep(x, y, newColor);
-            }, cellTransition)
-            dispatch(
-                setPos(x, y)
-            );
             return;
         }
 
@@ -216,8 +206,6 @@ const App: React.FC = () => {
             inner: goalCell % 10,
             outer: Math.floor(goalCell / 10),
         }
-        console.log('определены цвета целевой клетки = ', color);
-        console.log('newColor = ', newColor)
         if (newColor === color[rule]) {
 
             console.log('цвета совпали');
@@ -233,13 +221,13 @@ const App: React.FC = () => {
 
                 // врезался в старт
                 dispatch(
-                    setResult('start') // async
+                    setResult('start', steps) // async
                 );
             } else if (color[testNew] === 6) {
 
                 // финишировал
                 dispatch(
-                    setResult('win') // async
+                    setResult('win', steps) // async
                 );
             } else {
 
@@ -247,7 +235,7 @@ const App: React.FC = () => {
                 console.log('правильный ход');
                 setTimeout(() => {
                     moveIsOver(x, y);
-                }, cellTransition)
+                }, cellTransition * steps)
             }
 
             return;
@@ -255,7 +243,7 @@ const App: React.FC = () => {
 
         // неверный цвет
         dispatch(
-            setResult('wrongColor') // async
+            setResult('wrongColor', steps) // async
         );
     }
 
@@ -338,6 +326,7 @@ const App: React.FC = () => {
                       <CellMoving
                         matrix={map01}
                       />
+                      {/*<Result/>*/}
                   </div>
                   <div className={style.controls}>
                       <button

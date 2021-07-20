@@ -2,11 +2,12 @@ import React, {useEffect, useRef} from 'react';
 import style from './Cell.module.scss';
 import {useSelector} from "react-redux";
 import {ICellMovingProps, IRootState} from "../../types";
+import {cellTransition} from "../../App";
 
 const CellMoving: React.FC<ICellMovingProps> = props => {
 
     const ref = useRef<HTMLDivElement|null>(null);
-    const { posX, posY, moving, currentColor, rule } = useSelector((state: IRootState) => state);
+    const { posX, posY, moving, currentColor, rule, steps } = useSelector((state: IRootState) => state);
 
     // управление стилями
 
@@ -49,6 +50,7 @@ const CellMoving: React.FC<ICellMovingProps> = props => {
 
         // при изменении позиции X
         if (ref.current) {
+            ref.current.style.transitionDuration = cellTransition * steps + 'ms';
             ref.current.style.left = posX * 10 + '%';
         }
     }, [posX])
@@ -57,6 +59,7 @@ const CellMoving: React.FC<ICellMovingProps> = props => {
 
         // при изменении позиции Y
         if (ref.current) {
+            ref.current.style.transitionDuration = cellTransition * steps + 'ms';
             ref.current.style.top = posY * 10 + '%';
         }
     }, [posY])

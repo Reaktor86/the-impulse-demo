@@ -11,6 +11,7 @@ export const SET_MOVING = 'SET_MOVING';
 export const SET_POS = 'SET_POS';
 export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR';
 export const SHOW_RESULT = 'SHOW_RESULT';
+export const SET_STEPS = 'SET_STEPS';
 
 export function setArrowRotateIndex(index: number): TypeSetNumber {
     return {
@@ -46,6 +47,13 @@ export function setCurrentColor(num: number): TypeSetNumber {
     }
 }
 
+export function setSteps(num: number): TypeSetNumber {
+    return {
+        type: SET_STEPS,
+        payload: num,
+    }
+}
+
 export function setDisableControls(value: boolean): TypeSetBoolean {
     return {
         type: SET_DISABLE_CONTROLS,
@@ -73,13 +81,13 @@ export function setMoving(value: boolean): TypeSetBoolean {
     }
 }
 
-export function setResult(type: TypeResult) {
+export function setResult(type: TypeResult, steps: number) {
     return (dispatch: any) => {
         setTimeout(() => {
             dispatch(
                 showResult(type)
             );
-        }, cellTransition)
+        }, cellTransition * steps)
     }
 }
 

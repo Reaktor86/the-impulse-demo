@@ -107,8 +107,9 @@ $white: #fff;
 
 .cell__moving {
   @include cell();
-  transition: .2s linear;
   transition-property: top, left;
+  transition-duration: 200ms;
+  transition-timing-function: linear;
   position: absolute;
   z-index: 10;
 }

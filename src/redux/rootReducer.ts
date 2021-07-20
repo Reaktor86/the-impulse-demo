@@ -3,7 +3,7 @@ import {
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING, SET_POS, SHOW_RESULT,
+    SET_MOVING, SET_POS, SET_STEPS, SHOW_RESULT,
     SWITCH_RULE
 } from "./actionCreator";
 
@@ -24,6 +24,7 @@ const initialState: IRootState = {
     posX: posXDefault, // позиция движущегося квадрата по X (column, 0-9)
     posY: posYDefault, // позиция движущегося квадрата по Y (column, 0-9)
     currentColor: 0, // текущий цвет (тот, что мерцает)
+    steps: 0, // на сколько шагов произошёл ход (нужно для изменения css transition)
 }
 
 export default function rootReducer(state = initialState, action: any): IRootState {
@@ -65,6 +66,13 @@ export default function rootReducer(state = initialState, action: any): IRootSta
             return {
                 ...state,
                 disableControls: action.payload,
+            }
+        }
+
+        case SET_STEPS: {
+            return {
+                ...state,
+                steps: action.payload,
             }
         }
 

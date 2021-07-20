@@ -3,7 +3,7 @@ import {
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
     SET_DISABLE_CONTROLS,
-    SET_MOVING, SET_POS, SHOW_RESULT,
+    SET_MOVING, SET_POS, SET_STEPS, SHOW_RESULT,
     SWITCH_RULE
 } from "./redux/actionCreator";
 
@@ -21,6 +21,7 @@ export interface IRootState {
     posX: number
     posY: number
     currentColor: number
+    steps: number
 }
 
 // actions
@@ -51,6 +52,11 @@ interface ISetCurrentColor {
     payload: number
 }
 
+interface ISetSteps {
+    type: typeof SET_STEPS
+    payload: number
+}
+
 interface ISetArrowShow {
     type: typeof SET_ARROW_SHOW
     payload: boolean
@@ -75,7 +81,7 @@ export interface IShowResult {
     payload: TypeResult
 }
 
-export type TypeSetNumber = ISetArrowRotateIndex | ISetCurrentColor;
+export type TypeSetNumber = ISetArrowRotateIndex | ISetCurrentColor | ISetSteps;
 export type TypeSetBoolean = ISetArrowShow | ISetDisableControls | ISetMoving;
 export type TypeCords = ISetArrowPos | ISetPos;
 
