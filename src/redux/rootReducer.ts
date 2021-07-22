@@ -1,4 +1,5 @@
 import {
+    GAME_RESET,
     SET_ARROW_POS,
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
@@ -7,7 +8,7 @@ import {
     SWITCH_RULE
 } from "./actionCreator";
 
-import {IRootState} from "../types";
+import {IRootState, TypeResult} from "../types";
 
 import {posXDefault} from '../App';
 import {posYDefault} from '../App';
@@ -25,6 +26,14 @@ const initialState: IRootState = {
     posY: posYDefault, // позиция движущегося квадрата по Y (column, 0-9)
     currentColor: 0, // текущий цвет (тот, что мерцает)
     steps: 0, // на сколько шагов произошёл ход (нужно для изменения css transition)
+    showResult: false, // показать результат
+    resultContent: {
+        headText: 'ОШИБКА',
+        bodyText: 'неправильный цвет',
+        win: false, // характер результата - нужен для изменений высоты дива и дальнейшего действия
+    },
+    wins: 0, // число побед
+    loses: 0, // число ошибок
 }
 
 export default function rootReducer(state = initialState, action: any): IRootState {
@@ -116,8 +125,74 @@ export default function rootReducer(state = initialState, action: any): IRootSta
 
             console.log('РЕЗУЛЬТАТ: ', action.payload);
 
+            const type: TypeResult = action.payload;
+            let head = '';
+            let body = '';
+            let win = false;
+            let winsCount = state.wins;
+
+            switch (type) {
+                case 'wall': {
+                    head = 'ОШИБКА';
+                    body = 'удар об стену';
+                    break;
+                }
+                case 'wrongColor': {
+                    head = 'ОШИБКА';
+                    body = 'неправильный цвет';
+                    break;
+                }
+                case 'start': {
+                    head = 'ОШИБКА';
+                    body = 'вернулся в начало!';
+                    break;
+                }
+                case 'win': {
+                    head = 'ПОБЕДА!';
+                    body = 'Спасибо за игру';
+                    win = true;
+                    winsCount++;
+                }
+            }
+
             return {
                 ...state,
+                showResult: true,
+                resultContent: {
+                    headText: head,
+                    bodyText: body,
+                    win: win,
+                },
+                wins: winsCount,
+            }
+        }
+
+        case GAME_RESET: {
+
+            let loses = state.loses;
+            let showResult = false;
+
+            if (action.payload === 'win') {
+                showResult = true;
+            } else if (action.payload === 'again') {
+                showResult = false;
+            } else {
+                loses++;
+            }
+
+            return {
+                ...state,
+                arrowRotateIndex: 0,
+                arrowPosX: posXDefault,
+                arrowPosY: posYDefault,
+                arrowShow: true,
+                disableControls: false,
+                rule: 'inner',
+                moving: false,
+                posX: posXDefault,
+                posY: posYDefault,
+                showResult: showResult,
+                loses: loses,
             }
         }
 

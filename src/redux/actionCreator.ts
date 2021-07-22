@@ -1,4 +1,4 @@
-import {TypeSetNumber, TypeSetBoolean, ISwitchRule, TypeCords, TypeResult, IShowResult} from "../types";
+import {TypeSetNumber, TypeSetBoolean, ISwitchRule, TypeCords, TypeResult, IShowResult, IGameReset} from "../types";
 
 import {cellTransition} from '../App';
 
@@ -10,8 +10,9 @@ export const SWITCH_RULE = 'SWITCH_RULE';
 export const SET_MOVING = 'SET_MOVING';
 export const SET_POS = 'SET_POS';
 export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR';
-export const SHOW_RESULT = 'SHOW_RESULT';
 export const SET_STEPS = 'SET_STEPS';
+export const SHOW_RESULT = 'SHOW_RESULT';
+export const GAME_RESET = 'GAME_RESET';
 
 export function setArrowRotateIndex(index: number): TypeSetNumber {
     return {
@@ -88,6 +89,14 @@ export function setResult(type: TypeResult, steps: number) {
                 showResult(type)
             );
         }, cellTransition * steps)
+
+        if (type !== 'win') {
+            setTimeout(() => {
+                dispatch(
+                    gameReset(type)
+                );
+            }, 3000)
+        }
     }
 }
 
@@ -95,5 +104,12 @@ export function showResult(type: TypeResult): IShowResult {
     return {
         type: SHOW_RESULT,
         payload: type,
+    }
+}
+
+export function gameReset(win: TypeResult | 'again'): IGameReset {
+    return {
+        type: GAME_RESET,
+        payload: win,
     }
 }

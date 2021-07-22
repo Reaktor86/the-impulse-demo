@@ -1,4 +1,5 @@
 import {
+    GAME_RESET,
     SET_ARROW_POS,
     SET_ARROW_ROTATE_INDEX,
     SET_ARROW_SHOW, SET_CURRENT_COLOR,
@@ -22,6 +23,14 @@ export interface IRootState {
     posY: number
     currentColor: number
     steps: number
+    showResult: boolean
+    resultContent: {
+        headText: string
+        bodyText: string
+        win: boolean
+    }
+    wins: number
+    loses: number
 }
 
 // actions
@@ -79,6 +88,11 @@ export interface ISwitchRule {
 export interface IShowResult {
     type: typeof SHOW_RESULT
     payload: TypeResult
+}
+
+export interface IGameReset {
+    type: typeof GAME_RESET
+    payload: TypeResult | 'again'
 }
 
 export type TypeSetNumber = ISetArrowRotateIndex | ISetCurrentColor | ISetSteps;

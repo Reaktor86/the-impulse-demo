@@ -13,10 +13,6 @@
   width: 250px;
 }
 
-.result__win {
-  height: 150px;
-}
-
 .result__bg {
   background: #b4dcffa8;
   height: 80px; /*158*/
@@ -48,4 +44,31 @@
   color: white;
   font-weight: bold;
   margin-top: 36px;
+}
+
+.error__animate {
+  animation: error 250ms infinite;
+}
+
+.win {
+  color: green;
+}
+
+@keyframes error {
+  from {
+    color: #d65300;
+    text-shadow: none;
+  }
+  34% {
+    color: #d65300;
+    text-shadow: none;
+  }
+  35% {
+    color: #ff0000;
+    text-shadow: 0 0 4px rgba(255, 0, 0, 1);
+  }
+  to {
+    color: #ff0000;
+    text-shadow: 0 0 4px rgba(255, 0, 0, 1);
+  }
 }

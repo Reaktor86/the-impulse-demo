@@ -1,15 +1,16 @@
-import React from 'react'
+import React from 'react';
+import {useSelector} from "react-redux";
+import {IRootState} from "../../types";
 
 const Stat: React.FC = () => {
 
-    /*const [loses, setLoses] = useState(0);
-    const [wins, setWins] = useState(0);*/
+    const { wins, loses } = useSelector((state : IRootState) => state)
 
     return (
         <>
             <p><b>Статистика:</b></p>
-            <p>Ошибки - 0</p>
-            <p>Победы - 0</p>
+            <p>Ошибки - {loses}</p>
+            <p>Победы - {wins}</p>
         </>
     )
 }

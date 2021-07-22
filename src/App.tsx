@@ -39,7 +39,7 @@ const App: React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const { arrowRotateIndex, disableControls, arrowPosX, arrowPosY, rule, posX, posY } = useSelector((state: IRootState) => state);
+    const { arrowRotateIndex, disableControls, arrowPosX, arrowPosY, rule, posX, posY, showResult } = useSelector((state: IRootState) => state);
 
     const reset = () => {
 
@@ -154,7 +154,7 @@ const App: React.FC = () => {
             }
 
             // если на новой позиции пустая клетка и не стена, то цикл повторится
-        } while (map01[y][x] === 0 && !(x < 0 || x > 9 || y < 0 || y > 9))
+        } while (!(x < 0 || x > 9 || y < 0 || y > 9) && map01[y][x] === 0)
 
         dispatch(
             setSteps(steps)
@@ -326,7 +326,11 @@ const App: React.FC = () => {
                       <CellMoving
                         matrix={map01}
                       />
-                      {/*<Result/>*/}
+                      {
+                          showResult ?
+                              <Result/>
+                              : null
+                      }
                   </div>
                   <div className={style.controls}>
                       <button
@@ -361,3 +365,11 @@ const App: React.FC = () => {
 export default App;
 
 // TODO: рефакторить в классовый
+
+/*
+TODO:
+- горячие клавиши
+- проверить адаптив
+- удалить консоль логи
+- продакшн
+ */
