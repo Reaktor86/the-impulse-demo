@@ -18,7 +18,7 @@ const Arrow: React.FC<IArrowProps> = props => {
 
     useEffect(() => {
 
-        console.log('rotateIndex = ', arrowRotateIndex);
+        //console.log('rotateIndex = ', arrowRotateIndex);
     }, [arrowRotateIndex])
 
     useEffect(() => {

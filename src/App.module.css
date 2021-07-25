@@ -109,6 +109,9 @@ p, a {
   .main .sidebar {
     order: 1;
   }
+  .main .sidebar .howTo {
+    display: none;
+  }
   .main .game {
     order: 0;
   }

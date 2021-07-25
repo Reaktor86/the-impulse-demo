@@ -123,7 +123,7 @@ export default function rootReducer(state = initialState, action: any): IRootSta
 
         case SHOW_RESULT: {
 
-            console.log('РЕЗУЛЬТАТ: ', action.payload);
+            //console.log('РЕЗУЛЬТАТ: ', action.payload);
 
             const type: TypeResult = action.payload;
             let head = '';

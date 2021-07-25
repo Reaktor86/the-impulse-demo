@@ -126,6 +126,10 @@ p, a {
 
         .sidebar {
             order: 1;
+
+            .howTo {
+                display: none;
+            }
         }
         .game {
             order: 0;
